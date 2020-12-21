@@ -1,4 +1,4 @@
-#load "Parsing.fsx"
+#load "Parsing.fsx"#load "Evaluation.fsx"
 namespace Poker
 
 open Poker

@@ -1,4 +1,4 @@
-#load "Domain.fsx"#load "Result.fsx"
+#load "Domain.fs"#load "Result.fsx"
 namespace Poker
 
 open Poker
