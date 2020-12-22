@@ -1,1 +1,1 @@
-dotnet fsi src/poker.fsx
+dotnet run --project ./src/Poker.fsproj

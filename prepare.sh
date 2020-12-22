@@ -7,3 +7,6 @@ dpkg -i packages-microsoft-prod.deb
 apt-get install -y apt-transport-https && \ 
     apt-get update && \  
     apt-get install -y dotnet-sdk-5.0
+
+dotnet restore ./src/Poker.fsproj
+dotnet build ./src/Poker.fsproj
