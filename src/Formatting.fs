@@ -79,7 +79,7 @@ module Parsing =
             then (index, index + 1)
             else (input.Length, input.Length)
 
-        (input.Substring(0, tokenIndex), input.Substring(restIndex))
+        (input.Substring(0, tokenIndex), input.Substring(restIndex).Trim())
 
     let parseGameType (input: string) =
         let (gameType, rest) = consumeToken ' ' input
