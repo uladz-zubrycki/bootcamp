@@ -14,27 +14,27 @@ let input = @"..\data\input.txt"
 let output = @"..\out\result.txt"
 
 let printSuit suit =
-    match suit with
-    | Spades -> "♠"
-    | Hearts -> "♥"
-    | Diamonds -> "♦"
-    | Clubs -> "♣"
+  match suit with
+  | Spades -> "♠"
+  | Hearts -> "♥"
+  | Diamonds -> "♦"
+  | Clubs -> "♣"
 
 let printRank rank =
-    match rank with
-    | Ace -> "A"
-    | King -> "K"
-    | Queen -> "Q"
-    | Jack -> "J"
-    | Ten -> "10"
-    | Nine -> "9"
-    | Eight -> "8"
-    | Seven -> "7"
-    | Six -> "6"
-    | Five -> "5"
-    | Four -> "4"
-    | Three -> "3"
-    | Two -> "2"
+  match rank with
+  | Ace -> "A"
+  | King -> "K"
+  | Queen -> "Q"
+  | Jack -> "J"
+  | Ten -> "10"
+  | Nine -> "9"
+  | Eight -> "8"
+  | Seven -> "7"
+  | Six -> "6"
+  | Five -> "5"
+  | Four -> "4"
+  | Three -> "3"
+  | Two -> "2"
 
 fsi.AddPrinter<CardSuit> printSuit
 fsi.AddPrinter<CardRank> printRank

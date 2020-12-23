@@ -6,98 +6,98 @@ let minHandCount = 3
 let filePath = @"..\data\input.txt"
 
 type GameRules =
-    { Name: string
-      BoardSize: int
-      HandSize: int }
+  { Name: string
+    BoardSize: int
+    HandSize: int }
 
 let games =
-    [ { Name = "texas-holdem"
-        BoardSize = 5
-        HandSize = 2 }
-      { Name = "omaha-holdem"
-        BoardSize = 5
-        HandSize = 4 }
-      { Name = "five-card-draw"
-        BoardSize = 0
-        HandSize = 5 } ]
+  [ { Name = "texas-holdem"
+      BoardSize = 5
+      HandSize = 2 }
+    { Name = "omaha-holdem"
+      BoardSize = 5
+      HandSize = 4 }
+    { Name = "five-card-draw"
+      BoardSize = 0
+      HandSize = 5 } ]
 
 let suits = [ "s"; "c"; "d"; "h" ]
 
 let ranks =
-    [ "A"
-      "K"
-      "Q"
-      "J"
-      "T"
-      "9"
-      "8"
-      "7"
-      "6"
-      "5"
-      "3"
-      "2" ]
+  [ "A"
+    "K"
+    "Q"
+    "J"
+    "T"
+    "9"
+    "8"
+    "7"
+    "6"
+    "5"
+    "3"
+    "2" ]
 
 let cards =
-    suits
-    |> List.collect
-        (fun suit ->
-            ranks
-            |> List.map (fun rank -> sprintf "%s%s" rank suit))
+  suits
+  |> List.collect
+       (fun suit ->
+         ranks
+         |> List.map (fun rank -> sprintf "%s%s" rank suit))
 
 open System
 
 let rand = Random()
 
 let randomIndices size =
-    let rec inner (taken: int Set) (result: int List) =
-        if result.Length = size then
-            result
-        else
-            let index = rand.Next(size)
+  let rec inner (taken: int Set) (result: int List) =
+    if result.Length = size then
+      result
+    else
+      let index = rand.Next(size)
 
-            if not (taken.Contains index)
-            then inner (taken.Add index) (index :: result)
-            else inner taken result
+      if not (taken.Contains index)
+      then inner (taken.Add index) (index :: result)
+      else inner taken result
 
-    inner Set.empty []
+  inner Set.empty []
 
 let definitions =
-    seq {
-        for game in games do
-            for i in 1 .. (gamesCount / games.Length) do
-                let indices = randomIndices cards.Length
+  seq {
+    for game in games do
+      for i in 1 .. (gamesCount / games.Length) do
+        let indices = randomIndices cards.Length
 
-                let cards =
-                    cards |> List.permute (fun i -> indices.[i])
+        let cards =
+          cards |> List.permute (fun i -> indices.[i])
 
-                let board =
-                    cards
-                    |> List.take game.BoardSize
-                    |> String.concat ""
+        let board =
+          cards
+          |> List.take game.BoardSize
+          |> String.concat ""
 
-                let handChunks =
-                    cards
-                    |> List.skip game.BoardSize
-                    |> List.chunkBySize game.HandSize
-                    |> List.filter (fun h -> h.Length = game.HandSize)
+        let handChunks =
+          cards
+          |> List.skip game.BoardSize
+          |> List.chunkBySize game.HandSize
+          |> List.filter (fun h -> h.Length = game.HandSize)
 
-                let handsCount =
-                    rand.Next(minHandCount, handChunks.Length)
+        let handsCount =
+          rand.Next(minHandCount, handChunks.Length)
 
-                let hands =
-                    handChunks
-                    |> List.take handsCount
-                    |> List.map (String.concat "")
-                    |> String.concat " "
+        let hands =
+          handChunks
+          |> List.take handsCount
+          |> List.map (String.concat "")
+          |> String.concat " "
 
-                let definition =
-                    [ game.Name; board; hands ]
-                    |> List.filter (String.IsNullOrEmpty >> not)
-                    |> String.concat " "
+        let definition =
+          [ game.Name; board; hands ]
+          |> List.filter (String.IsNullOrEmpty >> not)
+          |> String.concat " "
 
-                yield definition
-    }
-    |> Seq.toList
+        yield definition
+  }
+  |> Seq.toList
 
 
 if File.Exists(filePath)
