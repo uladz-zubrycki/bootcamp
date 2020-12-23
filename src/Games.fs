@@ -17,21 +17,24 @@ module Texas =
 
     let evaluate (board: Board) (hands: Hand list) =
         hands
-        |> sortHands (fun (Hand cards) ->
-            let (Board boardCards) = board
-            let indices = List.init (cards.Length + 1) id
+        |> sortHands
+            (fun (Hand cards) ->
+                let (Board boardCards) = board
+                let indices = List.init (cards.Length + 1) id
 
-            indices
-            |> List.map (fun i -> (i, boardCards.Length - i))
-            |> List.collect (fun (handCount, boardCount) ->
-                let handSubsets = cards |> List.subsets handCount
-                let boardSubsets = boardCards |> List.subsets boardCount
+                indices
+                |> List.map (fun i -> (i, boardCards.Length - i))
+                |> List.collect
+                    (fun (handCount, boardCount) ->
+                        let handSubsets = cards |> List.subsets handCount
+                        let boardSubsets = boardCards |> List.subsets boardCount
 
-                boardSubsets
-                |> List.collect (fun boardSubset ->
-                    handSubsets
-                    |> List.map (fun handSubset -> (boardSubset, handSubset))))
-            |> List.map (fun (boardCards, handCards) -> HandCase.Create boardCards handCards))
+                        boardSubsets
+                        |> List.collect
+                            (fun boardSubset ->
+                                handSubsets
+                                |> List.map (fun handSubset -> (boardSubset, handSubset))))
+                |> List.map (fun (boardCards, handCards) -> HandCase.Create boardCards handCards))
 
     let handle (game: TexasGame) =
         evaluate game.Board game.Hands
@@ -51,19 +54,21 @@ module Omaha =
 
     let evaluate (board: Board) (hands: Hand list) =
         hands
-        |> sortHands (fun (Hand cards) ->
-            let (Board boardCards) = board
-            let boardSubsets = boardCards |> List.subsets 3
-            let handSubsets = cards |> List.subsets 2
+        |> sortHands
+            (fun (Hand cards) ->
+                let (Board boardCards) = board
+                let boardSubsets = boardCards |> List.subsets 3
+                let handSubsets = cards |> List.subsets 2
 
-            let subsets =
-                boardSubsets
-                |> List.collect (fun boardSubset ->
-                    handSubsets
-                    |> List.map (fun handSubset -> (boardSubset, handSubset)))
+                let subsets =
+                    boardSubsets
+                    |> List.collect
+                        (fun boardSubset ->
+                            handSubsets
+                            |> List.map (fun handSubset -> (boardSubset, handSubset)))
 
-            subsets
-            |> List.map (fun (boardCards, handCards) -> HandCase.Create boardCards handCards))
+                subsets
+                |> List.map (fun (boardCards, handCards) -> HandCase.Create boardCards handCards))
 
     let handle (game: OmahaGame) =
         evaluate game.Board game.Hands
@@ -72,12 +77,9 @@ module Omaha =
 
 module FiveCard =
     let parse input =
-        let createGame hands =
-            FiveCard { Hands = hands }
-
         input
         |> parseHands (Hand.Create 5)
-        |> Result.map createGame
+        |> Result.map (fun hands -> FiveCard { Hands = hands })
         |> Result.mapError (sprintf "Abnormal Five Card Draw game: %A")
 
     let evaluate (hands: Hand list) =

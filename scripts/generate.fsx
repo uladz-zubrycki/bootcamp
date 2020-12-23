@@ -1,8 +1,9 @@
 open System.IO
 
+Directory.SetCurrentDirectory(__SOURCE_DIRECTORY__)
 let gamesCount = 100000
 let minHandCount = 3
-let filePath = @"D:\dev\bootcamp\data\input.txt"
+let filePath = @"..\data\input.txt"
 
 type GameRules =
     { Name: string
@@ -38,9 +39,10 @@ let ranks =
 
 let cards =
     suits
-    |> List.collect (fun suit ->
-        ranks
-        |> List.map (fun rank -> sprintf "%s%s" rank suit))
+    |> List.collect
+        (fun suit ->
+            ranks
+            |> List.map (fun rank -> sprintf "%s%s" rank suit))
 
 open System
 
@@ -52,6 +54,7 @@ let randomIndices size =
             result
         else
             let index = rand.Next(size)
+
             if not (taken.Contains index)
             then inner (taken.Add index) (index :: result)
             else inner taken result
