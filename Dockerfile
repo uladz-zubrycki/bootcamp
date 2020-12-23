@@ -1,10 +1,10 @@
 FROM ubuntu:latest
-COPY prepare.sh /prepare.sh 
-RUN ./prepare.sh
 ENV DOTNET_NOLOGO=true
 
+COPY /prepare.sh prepare.sh 
 COPY /src src
 COPY /run.sh run.sh
-COPY /data/input.txt input.txt
+COPY /data/input.txt /data/input.txt
 RUN mkdir /out
-CMD ./run.sh < input.txt > /out/result.txt
+RUN ./prepare.sh
+CMD ./run.sh < /data/input.txt > /out/result.txt

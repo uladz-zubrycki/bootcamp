@@ -19,10 +19,18 @@ Solution is implemented in the FSharp language, hence dotnet SDK is required.
 You could either build your image based on `ubuntu:latest` image, by running `prepare.sh` script to setup the dependencies then 
 or base your image on `mcr.microsoft.com/dotnet/sdk:latest`, where required SDK is installed already.
 
+Alternatively you could use provided `.Dockerfile` to build an image and execute application inside it.
+For your convenience bind `data` and `out` directories as input is read from `/data/input.txt` and written to `/out/result.txt`
+
+    docker build -t bootcamp . 
+    docker run --name bootcamp \ 
+        --mount type=bind,source="$(pwd)/out",target=out \ 
+        --mount type=bind,source="$(pwd)/data",target=data \ 
+        bootcamp
+
 ## Execution
 
 Run `run.sh` to run the application. Data is read from the `stdin` line by line with output sent to `stdout`.
 Passing piped files as input and output is the expected way to use this application: 
 
-```
-./run.sh < ./data/input.txt > ./out/output.txt
+    ./run.sh < ./data/input.txt > ./out/result.txt
