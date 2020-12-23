@@ -15,11 +15,10 @@ module Texas =
         |> parseGameWithBoard parseTexasHands createGame
         |> Result.mapError (sprintf "Abnormal Texas Hold'em game: %s")
 
-    let evaluate (board: Board) (hands: Hand list) =
+    let evaluate (Board boardCards) (hands: Hand list) =
         hands
         |> sortHands
             (fun (Hand cards) ->
-                let (Board boardCards) = board
                 let indices = List.init (cards.Length + 1) id
 
                 indices
@@ -52,11 +51,10 @@ module Omaha =
         |> parseGameWithBoard parseOmahaHands createGame
         |> Result.mapError (sprintf "Abnormal Omaha Hold'em game: %A")
 
-    let evaluate (board: Board) (hands: Hand list) =
+    let evaluate (Board boardCards) (hands: Hand list) =
         hands
         |> sortHands
             (fun (Hand cards) ->
-                let (Board boardCards) = board
                 let boardSubsets = boardCards |> List.subsets 3
                 let handSubsets = cards |> List.subsets 2
 

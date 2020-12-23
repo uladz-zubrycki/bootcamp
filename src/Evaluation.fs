@@ -80,17 +80,17 @@ and FullHouse =
         | _ -> failwithf "FullHouse expects ThreeOfKind and Pair as input"
 
 and TwoPairs =
-    | TwoPairsValues of Pair list
+    | TwoPairsValues of Pair * Pair
 
     static member Create values =
         match values with
-        | Pair fst, Pair snd -> TwoPairs(TwoPairsValues([ fst; snd ]))
+        | Pair fst, Pair snd -> TwoPairs(TwoPairsValues((fst, snd)))
         | _ -> failwithf "TwoPairs expects two Pair's as input"
 
 let private zipCompare comparer fst snd =
     (fst, snd)
     ||> Seq.zip
-    |> Seq.map (comparer)
+    |> Seq.map (fun (fst, snd) -> comparer fst snd)
     |> Seq.tryFind ((<>) 0)
     |> Option.orElse (Some 0)
     |> Option.get
@@ -100,7 +100,7 @@ let private compareRanks (fst: CardRank) (snd: CardRank) =
 
 let private compareCards (OrderedCards fst) (OrderedCards snd) =
     (fst, snd)
-    ||> zipCompare (fun (fst, snd) -> compareRanks fst.Rank snd.Rank)
+    ||> zipCompare (fun fst snd -> compareRanks fst.Rank snd.Rank)
 
 let private compareSameRankCards ((fstRank, fstValue): SameRankCards) ((sndRank, sndValue): SameRankCards) =
     let rankDiff = compareRanks fstRank sndRank
@@ -109,30 +109,25 @@ let private compareSameRankCards ((fstRank, fstValue): SameRankCards) ((sndRank,
     then rankDiff
     else compareCards fstValue.Rest sndValue.Rest
 
-let private compareTwoPairs (TwoPairsValues fst) (TwoPairsValues snd) =
-    let getSortedRanks handValue =
-        handValue
+let private compareTwoPairs (fst: TwoPairs) (snd: TwoPairs) =
+    let getSortedRanks (TwoPairsValues (f, s)) =
+        [ f; s ]
         |> List.map (fun (PairCards (rank, _)) -> rank)
         |> List.sortBy getRankOrder
 
     let cardsDiff =
         (getSortedRanks fst, getSortedRanks snd)
-        ||> zipCompare (fun (fst, snd) -> compareRanks fst snd)
+        ||> zipCompare compareRanks
 
     if cardsDiff <> 0 then
         cardsDiff
     else
         let getRest handValue =
-            let pairs =
-                handValue
-                |> List.map (fun (PairCards (_, v)) -> v)
-
-            match pairs with
-            | [ fst; snd ] ->
-                let (OrderedCards fstRest) = fst.Rest
-                let (OrderedCards sndCards) = snd.Cards
-                OrderedCardList.Create(fstRest |> List.except sndCards)
-            | _ -> failwith "TwoPairs should consist of two Pair's"
+            let (TwoPairsValues (fstPair, sndPair)) = handValue
+            let (PairCards (_, fstValue), PairCards (_, sndValue)) = (fstPair, sndPair)
+            let (OrderedCards fstRest) = fstValue.Rest
+            let (OrderedCards sndCards) = sndValue.Cards
+            OrderedCardList.Create(fstRest |> List.except sndCards)
 
         compareCards (getRest fst) (getRest snd)
 
