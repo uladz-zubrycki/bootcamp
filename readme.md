@@ -43,7 +43,7 @@ Passing piped files as input and output is the expected way to use this applicat
 
 Alternatively you could use interactive mode of execution. The same file from `/data/input.txt` will be read with result going to `/out/result.txt`
 
-    dotnet fsi ./scripts/interactive.fsx' 
+    dotnet fsi ./scripts/interactive.fsx 
 
 You might use `/scripts/generate.fsx` to generate test input file. Update parameters specified in the top of the script and run it.
 
