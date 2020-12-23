@@ -20,12 +20,13 @@ You could either build your image based on `ubuntu:latest` image, by running `pr
 or base your image on `mcr.microsoft.com/dotnet/sdk:latest`, where required SDK is installed already.
 
 Alternatively you could use provided `.Dockerfile` to build an image and execute application inside it.
-For your convenience bind `data` and `out` directories as input is read from `/data/input.txt` and written to `/out/result.txt`
+For your convenience bind `data` and `out` directories as input is read from `/data/input.txt` and written to `/out/result.txt`.
+Make sure that you're running command from the repository root as pathes are relative.
 
     docker build -t bootcamp . 
     docker run --name bootcamp \ 
-        --mount type=bind,source="$(pwd)/out",target=out \ 
-        --mount type=bind,source="$(pwd)/data",target=data \ 
+        --mount type=bind,source="$(pwd)/out",target=/out \ 
+        --mount type=bind,source="$(pwd)/data",target=/data \ 
         bootcamp
 
 ## Execution
