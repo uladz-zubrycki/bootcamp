@@ -26,7 +26,7 @@ or base your image on `mcr.microsoft.com/dotnet/sdk:latest`, where required SDK 
 
 Alternatively you could use provided `.Dockerfile` to build an image and execute application inside it.
 For your convenience bind `data` and `out` directories as input is read from `/data/input.txt` and written to `/out/result.txt`.
-Make sure that you're running command from the repository root as pathes are relative.
+Make sure that you're running command from the repository root as paths are relative.
 
     docker build -t bootcamp . 
     docker run --name bootcamp \ 
