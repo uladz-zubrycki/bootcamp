@@ -15,7 +15,7 @@ Input is expected in the form of
 
 Where each card is represented as two chars (rank and suit respectively).
 
-Simple brute force algorithm is used, application hasn't been tested in terms of time or memory consumption and isn't covered by tests.
+Simple brute force algorithm is used, application hasn't been optimized in terms of time or memory consumption and isn't covered by tests. Processing of 300k games takes of about 6 minutes. 
 Type system currently used might be simplified and/or refactored, but is left as is to simplify possible algorithm issues investigation: a bunch of unnecessary for the end result data is passed from place to place.
 
 ## Environment
@@ -41,6 +41,10 @@ Passing piped files as input and output is the expected way to use this applicat
 
     ./run.sh < ./data/input.txt > ./out/result.txt
 
-You might use `/scripts/generate.fsx` to generate test input files. Update parameters specified in the top of the file.
+Alternatively you could use interactive mode of execution. The same file from `/data/input.txt` will be read with result going to `/out/result.txt`
+
+    dotnet fsi ./scripts/interactive.fsx' 
+
+You might use `/scripts/generate.fsx` to generate test input file. Update parameters specified in the top of the script and run it.
 
     dotnet fsi /scripts/generate.fsx

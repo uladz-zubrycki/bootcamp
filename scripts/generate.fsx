@@ -61,7 +61,7 @@ let randomIndices size =
 let definitions =
     seq {
         for game in games do
-            for i in 1 .. gamesCount do
+            for i in 1 .. (gamesCount / games.Length) do
                 let indices = randomIndices cards.Length
 
                 let cards =

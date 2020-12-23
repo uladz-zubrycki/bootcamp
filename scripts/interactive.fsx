@@ -1,14 +1,17 @@
-﻿#load "Utils.fs"
-#load "Domain.fs"
-#load "Formatting.fs"
-#load "Evaluation.fs"
-#load "Games.fs"
+﻿#load @"..\src\Utils.fs"
+#load @"..\src\Domain.fs"
+#load @"..\src\Formatting.fs"
+#load @"..\src\Evaluation.fs"
+#load @"..\src\Games.fs"
+#load @"..\src\Main.fs"
 
+open System.IO
 open Poker
-open Poker.Parsing
-open Poker.Evaluation
-open System
-open System.Text.RegularExpressions
+open Poker.Main
+
+Directory.SetCurrentDirectory(__SOURCE_DIRECTORY__)
+let input = @"..\data\input.txt"
+let output = @"..\out\result.txt"
 
 let printSuit suit =
     match suit with
@@ -37,37 +40,11 @@ fsi.AddPrinter<CardSuit> printSuit
 fsi.AddPrinter<CardRank> printRank
 fsi.AddPrinter<Card>(fun c -> sprintf "%s%s" (printSuit c.Suit) (printRank c.Rank))
 
-let handleGame game =
-    match game with
-    | Texas g -> Texas.handle g
-    | Omaha g -> Omaha.handle g
-    | FiveCard g -> FiveCard.handle g
+if File.Exists output
+then File.Delete output
 
-let chooseParser gameType =
-    match gameType with
-    | TexasGame -> Texas.parse
-    | OmahaGame -> Omaha.parse
-    | FiveCardGame -> FiveCard.parse
-
-let processLine input =
-    let gameResult =
-        try
-            input
-            |> verifyInput
-            |> Result.bind parseGameType
-            |> Result.bind (fun (gameType, rest) ->
-                let parser = chooseParser gameType
-                parser rest)
-            |> Result.map handleGame
-        with e ->
-            let error =
-                let noNewLine =
-                    e.Message.Replace("\r\n", " ").Replace("\r", " ").Replace("\n", " ")
-
-                Regex.Replace(noNewLine, "\s+", " ")
-
-            Error error
-
-    match gameResult with
-    | Ok output -> output
-    | Error error -> sprintf "Error: %s" error
+let reader = new StreamReader(input)
+let writer = new StreamWriter(output)
+processInput reader writer
+writer.Close()
+reader.Close()
