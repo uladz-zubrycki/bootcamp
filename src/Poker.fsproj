@@ -10,7 +10,6 @@
     <Compile Include="Evaluation.fs" />
     <Compile Include="Games.fs" />
     <Compile Include="Main.fs" />
-    <None Include="Interactive.fsx" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 </Project>
