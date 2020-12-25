@@ -18,6 +18,15 @@ let private chooseParser gameType =
   | OmahaGame -> Omaha.parse
   | FiveCardGame -> FiveCard.parse
 
+let private beautifyError (error: string) =
+  let withoutLineBreaks =
+    error
+      .Replace("\r\n", " ")
+      .Replace("\r", " ")
+      .Replace("\n", " ")
+
+  Regex.Replace(withoutLineBreaks, "\s+", " ")
+
 let private processLine input =
   let gameResult =
     try
@@ -29,22 +38,11 @@ let private processLine input =
              let parser = chooseParser gameType
              parser rest)
       |> Result.map handleGame
-    with e ->
-      let error =
-        let noNewLine =
-          e
-            .Message
-            .Replace("\r\n", " ")
-            .Replace("\r", " ")
-            .Replace("\n", " ")
-
-        Regex.Replace(noNewLine, "\s+", " ")
-
-      Error error
+    with e -> Error e.Message
 
   match gameResult with
   | Ok output -> output
-  | Error error -> sprintf "Error: %s" error
+  | Error error -> sprintf "Error: %s" (beautifyError error)
 
 let processInput (input: TextReader) (output: TextWriter) =
   let rec inner (map: string -> string) =
