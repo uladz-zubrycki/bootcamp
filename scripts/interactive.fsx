@@ -40,11 +40,15 @@ fsi.AddPrinter<CardSuit> printSuit
 fsi.AddPrinter<CardRank> printRank
 fsi.AddPrinter<Card>(fun c -> sprintf "%s%s" (printSuit c.Suit) (printRank c.Rank))
 
-if File.Exists output
-then File.Delete output
+if File.Exists output then
+    File.Delete output
 
 let reader = new StreamReader(input)
 let writer = new StreamWriter(output)
 processInput reader writer
 writer.Close()
 reader.Close()
+
+"texas-holdem 6s9sJdKdQs Kh6d 5s3s 8h4h Jc9d 4c3d 7dJh"
+|> Texas.parse
+|> Result.map (fun (Texas game) -> Texas.handle game)

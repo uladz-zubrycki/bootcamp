@@ -6,8 +6,8 @@ type HandCase =
     { BoardCards: Card list
       HandCards: Card list }
     static member Create (boardCards: Card list) (handCards: Card list) =
-        if (boardCards.Length + handCards.Length) <> 5
-        then failwith "Hand case must have 5 cards for strength evaluation"
+        if (boardCards.Length + handCards.Length) <> 5 then
+            failwith "Hand case must have 5 cards for strength evaluation"
 
         { BoardCards = boardCards
           HandCards = handCards }
@@ -104,15 +104,16 @@ let private compareCards (OrderedCards fst) (OrderedCards snd) =
 let private compareSameRankCards ((fstRank, fstValue): SameRankCards) ((sndRank, sndValue): SameRankCards) =
     let rankDiff = compareRanks fstRank sndRank
 
-    if rankDiff <> 0
-    then rankDiff
-    else compareCards fstValue.Rest sndValue.Rest
+    if rankDiff <> 0 then
+        rankDiff
+    else
+        compareCards fstValue.Rest sndValue.Rest
 
 let private compareTwoPairs (fst: TwoPairs) (snd: TwoPairs) =
     let getSortedRanks (TwoPairsValues (f, s)) =
         [ f; s ]
         |> List.map (fun (PairCards (rank, _)) -> rank)
-        |> List.sortBy getRankOrder
+        |> List.sortByDescending getRankOrder
 
     let cardsDiff =
         (getSortedRanks fst, getSortedRanks snd)
@@ -188,9 +189,10 @@ let private straight (OrderedCards cards): (HandValue list) =
     let normalized =
         let minOrder = orders |> List.last
 
-        if minOrder = 0
-        then orders
-        else orders |> List.map (fun order -> order - minOrder)
+        if minOrder = 0 then
+            orders
+        else
+            orders |> List.map (fun order -> order - minOrder)
 
     let aceOrder = getRankOrder Ace
 
@@ -205,9 +207,10 @@ let private flush (OrderedCards cards): (HandValue list) =
         |> List.map (fun c -> c.Suit)
         |> List.distinct
 
-    if suits.Length = 1
-    then [ Flush({ Cards = OrderedCards(cards) }) ]
-    else []
+    if suits.Length = 1 then
+        [ Flush({ Cards = OrderedCards(cards) }) ]
+    else
+        []
 
 let private multipleOfKind (OrderedCards cards): (HandValue list) =
     let ofOtherRank rank =
@@ -277,11 +280,12 @@ let evaluateHand (hand: HandCase): HandValue =
             ([], simpleHandValues)
         ||> (@)
 
-    if handValues.Length = 0
-    then highCard orderedCards
-    elif handValues.Length = 1
-    then handValues.[0]
-    else handValues |> List.maxWith compareValues
+    if handValues.Length = 0 then
+        highCard orderedCards
+    elif handValues.Length = 1 then
+        handValues.[0]
+    else
+        handValues |> List.maxWith compareValues
 
 let sortHands (getHandCases: 'a -> HandCase list) (hands: 'a list): (((('a * HandCase) * HandValue) list) list) =
     let sorted =
@@ -310,6 +314,7 @@ let sortHands (getHandCases: 'a -> HandCase list) (hands: 'a list): (((('a * Han
                 | curGroup :: rest ->
                     let groupValue = curGroup |> List.head |> snd
 
-                    if compareValues curValue groupValue = 0
-                    then (curItem :: curGroup) :: rest
-                    else [ curItem ] :: (curGroup :: rest))
+                    if compareValues curValue groupValue = 0 then
+                        (curItem :: curGroup) :: rest
+                    else
+                        [ curItem ] :: (curGroup :: rest))
