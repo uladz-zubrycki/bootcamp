@@ -11,5 +11,6 @@
 metals.sbt
 
 target/
+null/
 
 .DS_Store
