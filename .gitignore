@@ -1,10 +1,15 @@
-.vs
-.vscode
-obj
-bin
-.fake
-.ionide
-*.fsproj.user
+*.class
+*.log
 
-/data
-/out
+.idea/
+
+.bloop
+.history
+.metals
+.vscode
+.bsp
+metals.sbt
+
+target/
+
+.DS_Store

@@ -1,0 +1,10 @@
+.vs
+.vscode
+obj
+bin
+.fake
+.ionide
+*.fsproj.user
+
+/data
+/out
