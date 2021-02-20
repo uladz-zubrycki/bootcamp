@@ -18,6 +18,7 @@ object TypeclassTask extends App {
   }
   import HashCode._
 
+  // Should it be upper or lowercase?
   implicit val StringHashCode: HashCode[String] = s => s.length()
 
   List("", "fdasd", "fdsadfad").foreach(s =>
@@ -29,7 +30,7 @@ object Task1 extends App {
   final case class Money(amount: BigDecimal)
   implicit val moneyOrdering: Ordering[Money] = Ordering.by(m => m.amount)
 
-  // Are there any other way to do a conversion, which is more concise?
+  // Is there any other way to do a conversion, which is more concise?
   val values = List(1, 4, 42, 2, 3).map(BigDecimal.apply).map(Money.apply)
   println(values.sorted)
 }
@@ -145,6 +146,31 @@ object Task4 extends App {
   // println(5 === "5")
 }
 
-object AdvancedHomework {
-  // TODO: create a typeclass for flatMap method
+object AdvancedHomework extends App {
+  trait FlatMap[F[_]] {
+    def flatMapCustom[A, B](x: F[A], f: A => F[B]): F[B]
+  }
+
+  object FlatMap {
+    implicit class FlatMapSyntax[F[+_], A](x: F[A]) {
+      def flatMapCustom[B](f: A => F[B])(implicit ops: FlatMap[F]): F[B] =
+        ops.flatMapCustom(x, f)
+    }
+  }
+
+  implicit val FlatMapOption = new FlatMap[Option] {
+    def flatMapCustom[A, B](x: Option[A], f: A => Option[B]) =
+      x match {
+        case None    => None
+        case Some(v) => f(v)
+      }
+  }
+
+  import FlatMap._
+
+  val some: Option[Int] = Some(1)
+  val none: Option[Int] = None
+
+  println(some.flatMapCustom(x => Option("lall")))
+  println(none.flatMapCustom(x => Option("lall")))
 }
