@@ -125,9 +125,11 @@ object Main {
         .distinct
         .sorted;
 
-    xs.zip(xs.tail)
-      .map({ case (fst, snd) => snd - fst })
-      .max
+    if (xs.length <= 1) 0
+    else
+      xs.zip(xs.tail)
+        .map({ case (fst, snd) => snd - fst })
+        .max
   }
 
   // https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses/
