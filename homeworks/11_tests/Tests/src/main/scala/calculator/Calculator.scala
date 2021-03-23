@@ -231,7 +231,7 @@ import Parser._
 import Renderer._
 import Calculator._
 
-object Program extends App {
+object Program {
   private def process(line: String): String = {
     val result = for {
       command <- parse(line)
@@ -244,13 +244,13 @@ object Program extends App {
     }
   }
 
-  // def main(args: Array[String]): Unit =
-  //   Source.stdin
-  //     .getLines()
-  //     .map(process)
-  //     .foreach(println)
+  def main(args: Array[String]): Unit =
+    Source.stdin
+      .getLines()
+      .map(process)
+      .foreach(println)
 
-  // had no time for tests :(
+  // manual testing
   def check() = {
     val lines = List(
       "divide 4 5", // "4 divided by 5 is 0.8"
