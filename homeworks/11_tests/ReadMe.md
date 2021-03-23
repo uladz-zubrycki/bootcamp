@@ -1,18 +1,6 @@
 ### Description
 
-```
-/**
- * HOMEWORK:
- *
- * Some classes and generated JSON codecs are provided for NBA API.
- * Unfortunately, they don't work as expected out of the box.
- * The task is to fix (rewrite) some of the codecs to make tests pass.
- * You are not supposed to change anything in _class_ HomeworkSpec,
- * instead of it you are supposed to keep your changes inside _companion object_ for HomeworkSpec.
- *
- * You are not allowed to rename fields in case classes.
- * You are not allowed to remove fields from case classes.
- * You are supposed to use camelCase if you introduce additional fields in case classes.
- *
- * It would be nice to avoid using Encoder/Decoder.forProductN where you specify all field names
-```
+As you might have noticed the calculator from the exercise 2 is buggy and far from perfect. 
+So you are to write a real thing: production-ready calculator! 
+Try to cover it with tests as much as possible. Check the coverage level with [scoverage](https://github.com/scoverage/sbt-scoverage) and improve it if possible. 
+Note that the point of this exercise is not to write something complicated but to write tests and play with code coverage. What you write is up to you and you can choose more entertaining topic if you like.
