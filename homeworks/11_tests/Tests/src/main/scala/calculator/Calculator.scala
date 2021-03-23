@@ -1,4 +1,10 @@
+package tests.calculator
+
 import scala.io.Source
+import Result.Average
+import Result.Min
+import Result.Max
+import Result.Divide
 
 sealed trait Command
 object Command {
@@ -52,7 +58,7 @@ object Parser {
     val max = CommandParser.create(Names.Max, parseDoubles)
     val any = CommandParser.anyName(parseDoubles)
 
-    line.split(' ').map(_.trim).filter(_.nonEmpty).toList match {
+    line.trim().split(' ').map(_.trim).filter(_.nonEmpty).toList match {
       case divide(_, Right(args))  => createDivide(args)
       case sum(_, Right(args))     => Right { Command.Sum(args) }
       case average(_, Right(args)) => Right { Command.Average(args) }
@@ -127,7 +133,7 @@ object Parser {
     def Max = "max"
   }
 
-  private def allNames =
+  private[calculator] def allNames =
     Set(Names.Divide, Names.Sum, Names.Average, Names.Min, Names.Max)
 
   private def isCommandName(s: String) = allNames.contains(s)
@@ -224,7 +230,7 @@ import Parser._
 import Renderer._
 import Calculator._
 
-object Program {
+object Program extends App {
   private def process(line: String): String = {
     val result = for {
       command <- parse(line)
@@ -237,11 +243,11 @@ object Program {
     }
   }
 
-  def main(args: Array[String]): Unit =
-    Source.stdin
-      .getLines()
-      .map(process)
-      .foreach(println)
+  // def main(args: Array[String]): Unit =
+  //   Source.stdin
+  //     .getLines()
+  //     .map(process)
+  //     .foreach(println)
 
   // had no time for tests :(
   def check() = {
@@ -271,4 +277,6 @@ object Program {
       .map(process)
       .foreach(println)
   }
+
+  check()
 }
