@@ -2,7 +2,6 @@ package tests.calculator
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.EitherValues
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import org.scalatest.matchers.should.Matchers
 import org.scalacheck.Gen
 
 class ParserSuite extends AnyFunSuite {
@@ -37,12 +36,12 @@ class ParserSuite extends AnyFunSuite {
   }
 }
 
-object ParserSuite extends ScalaCheckDrivenPropertyChecks with Matchers {
+object ParserSuite extends ScalaCheckDrivenPropertyChecks {
   def assertFails(input: Gen[String]) =
-    forAll(input)(s => Parser.parse(s).isLeft should be)
+    forAll(input)(s => assert(Parser.parse(s).isLeft))
 
   def assertParses(input: Gen[String]) =
-    forAll(input)(s => Parser.parse(s).isRight should be)
+    forAll(input)(s => assert(Parser.parse(s).isRight))
 
   val emptyInput = for {
     n <- Gen.choose(0, 100)
