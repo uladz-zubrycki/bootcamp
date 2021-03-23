@@ -1,3 +1,4 @@
+/* Using Calculator from the Homework#3 */
 package tests.calculator
 
 import scala.io.Source
